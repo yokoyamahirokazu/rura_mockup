@@ -106,23 +106,46 @@ export const Service = () => {
   }, [])
 
   const [flex, setFlex] = useState<string>('flex')
-  const [consoleWidth, setConsoleWidth] = useState<string>('calc(50% - 8px)')
+  const [consoleWidth, setConsoleWidth] = useState<string>('50%')
+  const [consoleLeftPadding, setConsoleLeftPadding] =
+    useState<string>('16px 8px 16px 16px')
+  const [consoleRightPadding, setConsoleRightPadding] =
+    useState<string>('16px 16px 16px 8px')
+  const [consoleRightBgColor, setConsoleRightBgColor] = useState<string>('#fff')
+
+  const [consoleRightHeight, setConsoleRightHeight] = useState<string>('100%')
 
   // 右コンポーネント幅取得
   const rightRef = useRef<HTMLDivElement>(null)
+  const consoleLeftRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       const rightWidth = entries[0].contentRect.width
       const rightHeight = entries[0].contentRect.height
+      const consoleLeftHeight = entries[1].contentRect.height
+
+      console.log('consoleLeftHeight:' + consoleLeftHeight)
+      const consoleRightHeightNumber =
+        'calc(100% - ' + consoleLeftHeight + 'px - 32px)'
+      console.log('consoleRightHeightNumber' + consoleRightHeightNumber)
 
       console.log('rightWidth:' + rightWidth)
       console.log('rightHeight:' + rightHeight)
       if (rightWidth < 480) setFlex('block')
       else setFlex('flex')
       if (rightWidth < 480) setConsoleWidth('100%')
-      else setConsoleWidth('100%')
+      else setConsoleWidth('50%')
+      if (rightWidth < 480) setConsoleLeftPadding('16px 16px 0')
+      else setConsoleLeftPadding('16px 8px 16px 16px')
+      if (rightWidth < 480) setConsoleRightPadding('16px')
+      else setConsoleRightPadding('16px 16px 16px 8px')
+      if (rightWidth < 480) setConsoleRightBgColor('#f7f7f7')
+      else setConsoleRightBgColor('#fff')
+      if (rightWidth < 480) setConsoleRightHeight(consoleRightHeightNumber)
+      else setConsoleRightHeight('100%')
     })
     rightRef.current && observer.observe(rightRef.current)
+    consoleLeftRef.current && observer.observe(consoleLeftRef.current)
     return () => {
       observer.disconnect()
     }
@@ -568,7 +591,7 @@ export const Service = () => {
                     display: `${flex}`,
                     justifyContent: 'center',
                     alignItems: 'flex-start',
-                    padding: '16px',
+                    padding: '0',
                     height: 'calc( 100% - 80px)',
                     width: '100%',
                     boxSizing: 'border-box',
@@ -578,21 +601,28 @@ export const Service = () => {
                   <div
                     style={{
                       width: `${consoleWidth}`,
-                      margin: '0 16px 0 0',
+                      padding: `${consoleLeftPadding}`,
+                      margin: '0 0 0 0',
+                      boxSizing: 'border-box',
                     }}
+                    ref={consoleLeftRef}
                   >
                     <ConsoleLeft />
                   </div>
                   <div
                     style={{
                       width: `${consoleWidth}`,
+                      padding: `${consoleRightPadding}`,
+                      backgroundColor: `${consoleRightBgColor}`,
+                      height: `${consoleRightHeight}`,
                       margin: '0 0 0 0',
+                      boxSizing: 'border-box',
                     }}
                   >
                     <ConsoleRight />
                   </div>
                 </div>
-                <ConsoleBottom>あいう</ConsoleBottom>
+                <ConsoleBottom>console bottom</ConsoleBottom>
               </div>
             </div>
           </ResizePanel>

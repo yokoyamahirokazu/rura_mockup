@@ -27,7 +27,33 @@ const ConsoleLeft: React.FC = () => {
           <IconSpeach />
           再生中のスピーチ
         </ConsoleTitle>
-        <LinearProgress variant="determinate" />
+        <LinearProgress
+          variant="determinate"
+          value={60}
+          valueBuffer={100}
+          style={{
+            height: '8px',
+            borderRadius: '4px',
+            margin: '0',
+          }}
+        />
+        <div
+          style={{
+            width: '100%',
+            height: '12px',
+            position: 'relative',
+            margin: '4px 0 0 0',
+          }}
+        >
+          <p style={{ left: '0', top: '0', position: 'absolute', margin: '0' }}>
+            0:00
+          </p>
+          <p
+            style={{ right: '0', top: '0', position: 'absolute', margin: '0' }}
+          >
+            0:00
+          </p>
+        </div>
       </ConsoleBox>
       <ConsoleBox>
         <ConsoleTitle>
@@ -40,7 +66,11 @@ const ConsoleLeft: React.FC = () => {
           <IconMike />
           スタッフマイク
         </ConsoleTitle>
-        <Slider aria-label="Volume" />
+        <Slider
+          defaultValue={50}
+          aria-label="Default"
+          valueLabelDisplay="auto"
+        />
       </ConsoleBox>
     </>
   )
