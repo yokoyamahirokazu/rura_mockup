@@ -1,5 +1,6 @@
 import Header from 'components/header'
-import StoreInfo from 'components/atoms/storeInfo'
+import ConsoleLeft from 'components/atoms/consoleLeft'
+import ConsoleRight from 'components/atoms/consoleRIght'
 import styled from 'styled-components'
 import ResizePanel from 'react-resize-panel-ts'
 import styles from '../style/Resize.module.css'
@@ -7,7 +8,12 @@ import ReactTooltip from 'react-tooltip'
 import { ReactComponent as IconCameraParent } from 'assets/icon/camera_parent.svg'
 import { ReactComponent as IconCameraOnly } from 'assets/icon/camera_only.svg'
 import { ReactComponent as IconCameraAll } from 'assets/icon/camera_all.svg'
-// import React, { useState, useCallback } from 'react'
+import { ReactComponent as IconAndroid } from 'assets/icon/android.svg'
+import { ReactComponent as IconDisplay } from 'assets/icon/display.svg'
+import { ReactComponent as IconVolume } from 'assets/icon/volume_high.svg'
+import { ReactComponent as IconSizeSmall } from 'assets/icon/camera_size_small.svg'
+import { ReactComponent as IconSizeLarge } from 'assets/icon/camera_size_large.svg'
+import { useState, useRef, useEffect } from 'react'
 
 export const Service = () => {
   const CAMERA = [
@@ -32,16 +38,95 @@ export const Service = () => {
       name: '手元カメラ',
     },
   ]
+  const STORE = [
+    {
+      id: 1,
+      name: '倉敷駅前店',
+      deviceType: 'android',
+    },
+  ]
 
-  const parentCamera = CAMERA.filter((output) => {
-    return output.id === 2
-  })
-  const childCamera = CAMERA.filter((output) => {
-    return output.id !== 2
+  const [parent, parentDp] = useState('none')
+  const [all, allDp] = useState('block')
+  const [only, onlyDp] = useState('none')
+
+  const [filter, setFilter] = useState<string | null>('1')
+
+  // 各カメラボタン
+  const handleParent = (e: React.MouseEvent<HTMLElement>) => {
+    const selectId = e.currentTarget.getAttribute('data-item')
+    setFilter(selectId)
+    parentDp('block')
+    allDp('none')
+    onlyDp('none')
+  }
+  const handleOnly = (e: React.MouseEvent<HTMLElement>) => {
+    const selectId = e.currentTarget.getAttribute('data-item')
+    setFilter(selectId)
+    parentDp('none')
+    allDp('none')
+    onlyDp('block')
+  }
+  const handleAll = () => {
+    parentDp('none')
+    allDp('block')
+    onlyDp('none')
+  }
+
+  // カメラ切り替え
+  const selectCmaera = CAMERA.filter((camera) => {
+    if (filter === '1') return camera.id === 1
+    if (filter === '2') return camera.id === 2
+    if (filter === '3') return camera.id === 3
+    if (filter === '4') return camera.id === 4
+    else return camera.id === 1
   })
 
-  console.log(parentCamera)
-  console.log(childCamera)
+  const otherCmaera = CAMERA.filter((camera) => {
+    if (filter === '1') return camera.id !== 1
+    if (filter === '2') return camera.id !== 2
+    if (filter === '3') return camera.id !== 3
+    if (filter === '4') return camera.id !== 4
+    else return camera.id !== 1
+  })
+
+  // 左コンポーネント幅取得
+  const leftRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      const leftWidth = entries[0].contentRect.width
+      const leftHeight = entries[0].contentRect.height
+      console.log('leftWidth:' + leftWidth)
+      console.log('leftWidth:' + leftHeight)
+    })
+    leftRef.current && observer.observe(leftRef.current)
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  const [flex, setFlex] = useState<string>('flex')
+  const [consoleWidth, setConsoleWidth] = useState<string>('calc(50% - 8px)')
+
+  // 右コンポーネント幅取得
+  const rightRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      const rightWidth = entries[0].contentRect.width
+      const rightHeight = entries[0].contentRect.height
+
+      console.log('rightWidth:' + rightWidth)
+      console.log('rightHeight:' + rightHeight)
+      if (rightWidth < 480) setFlex('block')
+      else setFlex('flex')
+      if (rightWidth < 480) setConsoleWidth('100%')
+      else setConsoleWidth('100%')
+    })
+    rightRef.current && observer.observe(rightRef.current)
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   return (
     <>
@@ -63,35 +148,23 @@ export const Service = () => {
             flexFlow: 'row nowrap',
           }}
         >
-          <ResizePanel
-            direction="e"
-            handleClass={styles.customeHandle}
-            borderClass={styles.customeBorder}
+          <div
             style={{
-              width: 'calc(100vw - 640px)',
-              maxWidth: 'calc(100vw - 320px)',
-              minWidth: '320px',
-              position: 'relative',
+              flexGrow: '2',
             }}
+            ref={leftRef}
           >
             <div
               style={{
-                flexGrow: '2',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                width: '100%',
+                height: '100%',
+                background: 'var(--bg-color)',
               }}
             >
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  background: 'var(--bg-color)',
-                }}
-              >
-                {CAMERA.length === 1 && (
-                  <>
-                    {CAMERA.map((cameraOnly) => {
+              {CAMERA.length === 1 && (
+                <>
+                  {CAMERA &&
+                    CAMERA.map((cameraOnly) => {
                       return (
                         <CameraBox key={cameraOnly.id}>
                           {cameraOnly.imgSrc && (
@@ -105,206 +178,424 @@ export const Service = () => {
                         </CameraBox>
                       )
                     })}
-                  </>
-                )}
-
-                {parentCamera.map((camera) => {
-                  return (
-                    <div
-                      key={camera.id}
-                      style={{
-                        width: 'calc(100% - 16px)',
-                        margin: '8px 8px 0',
-                        borderRadius: '4px',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <CameraBox>
-                        {camera.imgSrc && (
-                          <img
-                            src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
-                          />
-                        )}
-                        <CameraBoxToolBar>
-                          <CameraBoxName>{camera.name}</CameraBoxName>
-                          <CameraBoxTool>
-                            <CameraBoxButton
-                              data-tip
-                              data-for="cameraOnly"
-                              data-item={camera.id}
-                            >
-                              <IconCameraOnly />
-                            </CameraBoxButton>
-                            <CameraBoxButton data-tip data-for="cameraAll">
-                              <IconCameraAll />
-                            </CameraBoxButton>
-                          </CameraBoxTool>
-                        </CameraBoxToolBar>
-
-                        <ReactTooltip id="cameraOnly" effect="solid">
-                          <span>このカメラ映像だけ表示</span>
-                        </ReactTooltip>
-                        <ReactTooltip id="cameraAll" effect="solid">
-                          <span>全カメラ表示</span>
-                        </ReactTooltip>
-                      </CameraBox>
-                    </div>
-                  )
-                })}
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    width: '100%',
-                    padding: '4px',
-                    boxSizing: 'border-box',
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  {childCamera.map((camera) => {
-                    return (
+                </>
+              )}
+              <div>
+                {CAMERA.length > 1 && (
+                  <>
+                    {parent === 'none' && all === 'block' && only === 'none' && (
                       <div
-                        key={camera.id}
                         style={{
-                          width: 'calc(33.33333% - 8px)',
-                          margin: '4px',
-                          borderRadius: '4px',
-                          overflow: 'hidden',
+                          justifyContent: 'center',
+                          alignItems: 'flex-start',
+                          width: '100%',
+                          padding: '4px',
+                          boxSizing: 'border-box',
+                          flexWrap: 'wrap',
+                          display: 'flex',
                         }}
                       >
-                        <CameraBox>
-                          {camera.imgSrc && (
-                            <img
-                              src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
-                            />
-                          )}
-                          <CameraBoxToolBox>
+                        {CAMERA.map((camera) => {
+                          return (
                             <div
+                              key={camera.id}
                               style={{
-                                textAlign: 'center',
+                                width: 'calc(50% - 8px)',
+                                margin: '4px',
+                                borderRadius: '4px',
+                                overflow: 'hidden',
                               }}
                             >
-                              <CameraBoxToolBoxName>
-                                {camera.name}
-                              </CameraBoxToolBoxName>
+                              <CameraBox>
+                                {camera.imgSrc && (
+                                  <img
+                                    src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
+                                  />
+                                )}
+                                <CameraBoxToolBar>
+                                  <CameraBoxName>{camera.name}</CameraBoxName>
+                                  <CameraBoxTool>
+                                    <CameraBoxButton
+                                      data-tip
+                                      data-for="cameraParent"
+                                      data-item={camera.id}
+                                      onClick={handleParent}
+                                    >
+                                      <IconCameraParent />
+                                    </CameraBoxButton>
+                                    <CameraBoxButton
+                                      data-tip
+                                      data-for="cameraOnly"
+                                      data-item={camera.id}
+                                      onClick={handleOnly}
+                                    >
+                                      <IconCameraOnly />
+                                    </CameraBoxButton>
+                                  </CameraBoxTool>
+                                </CameraBoxToolBar>
+                                <ReactTooltip id="cameraParent" effect="solid">
+                                  <span>親子表示のメインにする</span>
+                                </ReactTooltip>
+                                <ReactTooltip id="cameraOnly" effect="solid">
+                                  <span>このカメラ映像だけ表示</span>
+                                </ReactTooltip>
+                                <ReactTooltip id="cameraAll" effect="solid">
+                                  <span>全てのカメラを均等に表示</span>
+                                </ReactTooltip>
+                              </CameraBox>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                    {parent === 'block' && all === 'none' && only === 'none' && (
+                      <div>
+                        {selectCmaera &&
+                          selectCmaera.map((camera: any) => {
+                            return (
                               <div
+                                key={camera.id}
                                 style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  margin: '8px auto 0',
+                                  width: 'calc(100% - 16px)',
+                                  margin: '8px 8px 0',
+                                  borderRadius: '4px',
+                                  overflow: 'hidden',
                                 }}
                               >
-                                <CameraBoxButton
-                                  data-tip
-                                  data-for="cameraParent"
-                                  data-item={camera.id}
-                                >
-                                  <IconCameraParent />
-                                </CameraBoxButton>
-                                <CameraBoxButton
-                                  data-tip
-                                  data-for="cameraOnly"
-                                  data-item={camera.id}
-                                >
-                                  <IconCameraOnly />
-                                </CameraBoxButton>
+                                <CameraBox>
+                                  {camera.imgSrc && (
+                                    <img
+                                      src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
+                                    />
+                                  )}
+                                  <CameraBoxToolBar>
+                                    <CameraBoxName>{camera.name}</CameraBoxName>
+                                    <CameraBoxTool>
+                                      <>
+                                        <CameraBoxButton
+                                          data-tip
+                                          data-for="cameraOnly"
+                                          data-item={camera.id}
+                                          onClick={handleOnly}
+                                        >
+                                          <IconCameraOnly />
+                                        </CameraBoxButton>
+                                        <ReactTooltip
+                                          id="cameraOnly"
+                                          effect="solid"
+                                        >
+                                          <span>このカメラ映像だけ表示</span>
+                                        </ReactTooltip>
+                                      </>
+
+                                      <CameraBoxButton
+                                        data-tip
+                                        data-for="cameraAll"
+                                        onClick={() => {
+                                          parentDp('none')
+                                          allDp('block')
+                                          onlyDp('none')
+                                        }}
+                                      >
+                                        <IconCameraAll />
+                                      </CameraBoxButton>
+                                      <ReactTooltip
+                                        id="cameraOnly"
+                                        effect="solid"
+                                      >
+                                        <span>このカメラ映像だけ表示</span>
+                                      </ReactTooltip>
+                                      <ReactTooltip
+                                        id="cameraAll"
+                                        effect="solid"
+                                      >
+                                        <span>全てのカメラを均等に表示</span>
+                                      </ReactTooltip>
+                                    </CameraBoxTool>
+                                  </CameraBoxToolBar>
+                                </CameraBox>
                               </div>
-                            </div>
-                          </CameraBoxToolBox>
-                          <ReactTooltip id="cameraParent" effect="solid">
-                            <span>親子表示のメインにする</span>
-                          </ReactTooltip>
-                          <ReactTooltip id="cameraOnly" effect="solid">
-                            <span>このカメラ映像だけ表示</span>
-                          </ReactTooltip>
-                        </CameraBox>
-                      </div>
-                    )
-                  })}
-                </div>
-                {/* {CAMERA.length > 1 && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'flex-start',
-                      width: '100%',
-                      padding: '4px',
-                      boxSizing: 'border-box',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    {CAMERA.map((camera) => {
-                      return (
+                            )
+                          })}
                         <div
-                          key={camera.id}
                           style={{
-                            width: 'calc(50% - 8px)',
-                            margin: '4px',
-                            borderRadius: '4px',
-                            overflow: 'hidden',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            width: '100%',
+                            padding: '4px',
+                            boxSizing: 'border-box',
+                            flexWrap: 'wrap',
                           }}
                         >
-                          <CameraBox>
-                            {camera.imgSrc && (
-                              <img
-                                src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
-                              />
-                            )}
-                            <CameraBoxToolBar>
-                              <CameraBoxName>{camera.name}</CameraBoxName>
-                              <CameraBoxTool>
-                                <CameraBoxButton
-                                  data-tip
-                                  data-for="cameraParent"
-                                  data-item={camera.id}
+                          {otherCmaera &&
+                            otherCmaera.map((camera) => {
+                              return (
+                                <div
+                                  key={camera.id}
+                                  style={{
+                                    width: 'calc(33.33333% - 8px)',
+                                    margin: '4px',
+                                    borderRadius: '4px',
+                                    overflow: 'hidden',
+                                  }}
                                 >
-                                  <IconCameraParent />
-                                </CameraBoxButton>
-                                <CameraBoxButton
-                                  data-tip
-                                  data-for="cameraOnly"
-                                  data-item={camera.id}
-                                >
-                                  <IconCameraOnly />
-                                </CameraBoxButton>
-                                <CameraBoxButton data-tip data-for="cameraAll">
-                                  <IconCameraAll />
-                                </CameraBoxButton>
-                              </CameraBoxTool>
-                            </CameraBoxToolBar>
-                            <ReactTooltip id="cameraParent" effect="solid">
-                              <span>親子表示のメインにする</span>
-                            </ReactTooltip>
-                            <ReactTooltip id="cameraOnly" effect="solid">
-                              <span>このカメラ映像だけ表示</span>
-                            </ReactTooltip>
-                            <ReactTooltip id="cameraAll" effect="solid">
-                              <span>全カメラ表示</span>
-                            </ReactTooltip>
-                          </CameraBox>
+                                  <CameraBox>
+                                    {camera.imgSrc && (
+                                      <img
+                                        src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
+                                      />
+                                    )}
+                                    <CameraBoxToolBox>
+                                      <div
+                                        style={{
+                                          textAlign: 'center',
+                                        }}
+                                      >
+                                        <CameraBoxToolBoxName>
+                                          {camera.name}
+                                        </CameraBoxToolBoxName>
+                                        <div
+                                          style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            margin: '8px auto 0',
+                                          }}
+                                        >
+                                          <CameraBoxButton
+                                            data-tip
+                                            data-for="cameraParent"
+                                            data-item={camera.id}
+                                            onClick={handleParent}
+                                          >
+                                            <IconCameraParent />
+                                          </CameraBoxButton>
+                                          <CameraBoxButton
+                                            data-tip
+                                            data-for="cameraOnly"
+                                            data-item={camera.id}
+                                            onClick={handleOnly}
+                                          >
+                                            <IconCameraOnly />
+                                          </CameraBoxButton>
+                                        </div>
+                                      </div>
+                                    </CameraBoxToolBox>
+                                    <ReactTooltip
+                                      id="cameraParent"
+                                      effect="solid"
+                                    >
+                                      <span>親子表示のメインにする</span>
+                                    </ReactTooltip>
+                                    <ReactTooltip
+                                      id="cameraOnly"
+                                      effect="solid"
+                                    >
+                                      <span>このカメラ映像だけ表示</span>
+                                    </ReactTooltip>
+                                  </CameraBox>
+                                </div>
+                              )
+                            })}
                         </div>
-                      )
-                    })}
+                      </div>
+                    )}
+                    {parent === 'none' && all === 'none' && only === 'block' && (
+                      <>
+                        {selectCmaera &&
+                          selectCmaera.map((camera) => {
+                            return (
+                              <div
+                                key={camera.id}
+                                style={{
+                                  width: '100%',
+                                  margin: '0 0',
+                                  borderRadius: '0',
+                                  overflow: 'hidden',
+                                }}
+                              >
+                                <CameraBox>
+                                  {camera.imgSrc && (
+                                    <img
+                                      src={`${process.env.PUBLIC_URL}/${camera.imgSrc}`}
+                                    />
+                                  )}
+                                  <CameraBoxToolBar>
+                                    <CameraBoxName>{camera.name}</CameraBoxName>
+                                    <CameraBoxTool>
+                                      {only === 'block' && (
+                                        <>
+                                          <CameraBoxButton
+                                            data-tip
+                                            data-for="cameraParent"
+                                            data-item={camera.id}
+                                            onClick={handleParent}
+                                          >
+                                            <IconCameraParent />
+                                          </CameraBoxButton>
+                                          <ReactTooltip
+                                            id="cameraParent"
+                                            effect="solid"
+                                          >
+                                            <span>親子表示のメインにする</span>
+                                          </ReactTooltip>
+                                        </>
+                                      )}
+                                      <>
+                                        <CameraBoxButton
+                                          data-tip
+                                          data-for="cameraAll"
+                                          onClick={handleAll}
+                                        >
+                                          <IconCameraAll />
+                                        </CameraBoxButton>
+                                        <ReactTooltip
+                                          id="cameraAll"
+                                          effect="solid"
+                                        >
+                                          <span>全てのカメラを均等に表示</span>
+                                        </ReactTooltip>
+                                      </>
+                                    </CameraBoxTool>
+                                  </CameraBoxToolBar>
+                                </CameraBox>
+                              </div>
+                            )
+                          })}
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+              {STORE.map((store) => {
+                return (
+                  <StoreInfoBox key={store.id}>
+                    <StoreName>{store.name}</StoreName>
+                    <ToolBar>
+                      {store.deviceType === 'android' && (
+                        <DeviceType>
+                          <IconAndroid />
+                          android
+                        </DeviceType>
+                      )}
+                      {store.deviceType === 'pc' && (
+                        <DeviceType>
+                          <IconDisplay />
+                          PC
+                        </DeviceType>
+                      )}
+                      <>
+                        <VolumeButton data-tip data-for="storeVolume">
+                          <IconVolume />
+                        </VolumeButton>
+                        <ReactTooltip id="storeVolume" effect="solid">
+                          <span>店舗側音量</span>
+                        </ReactTooltip>
+                      </>
+                      <>
+                        <CameraSizeButton data-tip data-for="cameraSmall">
+                          <IconSizeSmall />
+                        </CameraSizeButton>
+                        <ReactTooltip id="cameraSmall" effect="solid">
+                          <span>最小化</span>
+                        </ReactTooltip>
+                      </>
+                      <>
+                        <CameraSizeButton data-tip data-for="cameraLarge">
+                          <IconSizeLarge />
+                        </CameraSizeButton>
+                        <ReactTooltip id="cameraLarge" effect="solid">
+                          <span>最大化</span>
+                        </ReactTooltip>
+                      </>
+                      {parent === 'block' && (
+                        <>
+                          <CameraSizeButton
+                            data-tip
+                            data-for="cameraAll"
+                            onClick={handleAll}
+                          >
+                            <IconCameraAll />
+                          </CameraSizeButton>
+                          <ReactTooltip id="cameraAll" effect="solid">
+                            <span>全てのカメラを均等に表示</span>
+                          </ReactTooltip>
+                        </>
+                      )}
+                      {only === 'block' && (
+                        <>
+                          <CameraSizeButton
+                            data-tip
+                            data-for="cameraAll"
+                            onClick={() => {
+                              parentDp('none')
+                              onlyDp('none')
+                              allDp('block')
+                            }}
+                          >
+                            <IconCameraAll />
+                          </CameraSizeButton>
+                          <ReactTooltip id="cameraAll" effect="solid">
+                            <span>全てのカメラを均等に表示</span>
+                          </ReactTooltip>
+                        </>
+                      )}
+                    </ToolBar>
+                  </StoreInfoBox>
+                )
+              })}
+            </div>
+          </div>
+          <ResizePanel
+            direction="w"
+            style={{ width: '720px', minWidth: '320px', maxWidth: '720px' }}
+            borderClass={styles.customResizeBorder}
+            handleClass={styles.customHandle}
+          >
+            <div
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                flexGrow: '1',
+              }}
+            >
+              <div
+                style={{ position: 'relative', width: '100%', height: '100%' }}
+              >
+                <div
+                  style={{
+                    display: `${flex}`,
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    padding: '16px',
+                    height: 'calc( 100% - 80px)',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                  }}
+                  ref={rightRef}
+                >
+                  <div
+                    style={{
+                      width: `${consoleWidth}`,
+                      margin: '0 16px 0 0',
+                    }}
+                  >
+                    <ConsoleLeft />
                   </div>
-                )} */}
-
-                <StoreInfo name="倉敷駅前店" deviceType="android" />
+                  <div
+                    style={{
+                      width: `${consoleWidth}`,
+                      margin: '0 0 0 0',
+                    }}
+                  >
+                    <ConsoleRight />
+                  </div>
+                </div>
+                <ConsoleBottom>あいう</ConsoleBottom>
               </div>
             </div>
           </ResizePanel>
-
-          <div
-            style={{
-              flexGrow: '1',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <div>right panel</div>
-          </div>
         </div>
       </Contents>
     </>
@@ -415,4 +706,93 @@ const CameraBoxButton = styled.button`
   &:hover {
     opacity: 1;
   }
+`
+
+const StoreInfoBox = styled.div`
+  width: 100%;
+  height: 50px;
+  position: relative;
+`
+const StoreName = styled.span`
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+`
+const ToolBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 50px;
+  width: calc(100% - 200px - 16px);
+  flex-wrap: nowrap;
+  position: absolute;
+  right: 16px;
+  top: 0;
+`
+const DeviceType = styled.span`
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  & svg {
+    width: 20px;
+    height: 20px;
+    margin: 0 3px 0 0;
+  }
+`
+
+const VolumeButton = styled.button`
+  margin: 0 0 0 12px;
+  border: 0;
+  padding: 3px;
+  border-radius: 4px;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+  opacity: 0.75;
+  & svg {
+    width: 30px;
+    height: 30px;
+    margin: 0 0;
+  }
+  &:hover {
+    opacity: 1;
+  }
+`
+
+const CameraSizeButton = styled.button`
+  margin: 0 0 0 12px;
+  border: 0;
+  padding: 3px;
+  border-radius: 4px;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+  opacity: 0.75;
+  & svg {
+    width: 30px;
+    height: 30px;
+    margin: 0 0;
+  }
+  &:hover {
+    opacity: 1;
+  }
+`
+
+const ConsoleBottom = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 80px;
+  width: 100%;
+  border-top: var(--border-light);
 `
