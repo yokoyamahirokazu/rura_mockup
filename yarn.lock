@@ -1464,6 +1464,114 @@
     "prop-types" "^15.7.2"
     "react-is" "^16.8.0 || ^17.0.0"
 
+"@material/animation@^1.0.0":
+  "integrity" "sha512-Ed5/vggn6ZhSJ87yn3ZS1d826VJNFz73jHF2bSsgRtHDoB8KCuOwQMfdgAgDa4lKDF6CDIPCKBZPKrs2ubehdw=="
+  "resolved" "https://registry.npmjs.org/@material/animation/-/animation-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "tslib" "^1.9.3"
+
+"@material/base@^1.0.0":
+  "integrity" "sha512-5dxFp46x5FA+Epg6YHLzN+5zRt9S2wR84UdvVAEJ1egea94m9UHUg7y9tAnNSN16aexRSywmzyLwPr+i8PGEYA=="
+  "resolved" "https://registry.npmjs.org/@material/base/-/base-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "tslib" "^1.9.3"
+
+"@material/dom@^1.0.0", "@material/dom@^1.1.0":
+  "integrity" "sha512-+HWW38ZaM2UBPu4+7QCusLDSf4tFT31rsEXHkTkxYSg/QpDivfPx6YDz4OmYtafmhPR1d1YjqB3MYysUHdodyw=="
+  "resolved" "https://registry.npmjs.org/@material/dom/-/dom-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "tslib" "^1.9.3"
+
+"@material/feature-targeting@^0.44.1":
+  "integrity" "sha512-90cc7njn4aHbH9UxY8qgZth1W5JgOgcEdWdubH1t7sFkwqFxS5g3zgxSBt46TygFBVIXNZNq35Xmg80wgqO7Pg=="
+  "resolved" "https://registry.npmjs.org/@material/feature-targeting/-/feature-targeting-0.44.1.tgz"
+  "version" "0.44.1"
+
+"@material/react-ripple@^0.15.0":
+  "integrity" "sha512-8YPEpiQNOaq3QtMc1DBxVVqOg/XnoWDj/EJ8eW0xmB4HvXElztKNTZoIpAAuQMZ8jbyZkRJRiFDa33u+wLFDCg=="
+  "resolved" "https://registry.npmjs.org/@material/react-ripple/-/react-ripple-0.15.0.tgz"
+  "version" "0.15.0"
+  dependencies:
+    "@material/dom" "^1.0.0"
+    "@material/ripple" "^1.0.0"
+    "classnames" "^2.2.6"
+    "utility-types" "^3.2.1"
+
+"@material/react-tab-indicator@^0.15.0":
+  "integrity" "sha512-rznSK1abeuyCQsPtKzfcY/zgEm+JQOsli/7xAHXA0WDeJA/8mteiJBehvItJtEfXzwloP/b3r62PTUEBZK0LWw=="
+  "resolved" "https://registry.npmjs.org/@material/react-tab-indicator/-/react-tab-indicator-0.15.0.tgz"
+  "version" "0.15.0"
+  dependencies:
+    "@material/tab-indicator" "^1.0.0"
+    "classnames" "^2.2.6"
+
+"@material/react-tab@^0.15.0":
+  "integrity" "sha512-GGY9slESEV9O80H7kGELMKeDD20lzgdZCQalAtlVQLQdP6ej8vZ0bHyl55x1w0kLkk3tej+G1UZQ5kYt01yUzA=="
+  "resolved" "https://registry.npmjs.org/@material/react-tab/-/react-tab-0.15.0.tgz"
+  "version" "0.15.0"
+  dependencies:
+    "@material/react-ripple" "^0.15.0"
+    "@material/react-tab-indicator" "^0.15.0"
+    "@material/tab" "^1.0.0"
+    "classnames" "^2.2.6"
+
+"@material/ripple@^1.0.0", "@material/ripple@^1.1.0":
+  "integrity" "sha512-mkfDBZAmxjpRG7V9TrfOmLxt1g/wvGHCXtYPgvH7W8ozjf53edqxLOFENEdvHbie27y9nyixzXn0gzU0HnxSeA=="
+  "resolved" "https://registry.npmjs.org/@material/ripple/-/ripple-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@material/animation" "^1.0.0"
+    "@material/base" "^1.0.0"
+    "@material/dom" "^1.1.0"
+    "@material/feature-targeting" "^0.44.1"
+    "@material/theme" "^1.1.0"
+    "tslib" "^1.9.3"
+
+"@material/rtl@^0.42.0":
+  "integrity" "sha512-VrnrKJzhmspsN8WXHuxxBZ69yM5IwhCUqWr1t1eNfw3ZEvEj7i1g3P31HGowKThIN1dc1Wh4LE14rCISWCtv5w=="
+  "resolved" "https://registry.npmjs.org/@material/rtl/-/rtl-0.42.0.tgz"
+  "version" "0.42.0"
+
+"@material/tab-indicator@^1.0.0", "@material/tab-indicator@^1.1.0":
+  "integrity" "sha512-wbZMFCfQo62einr/Ju9PDAeFpRR/Ori5oV2lcsF1uSQXeLxougarwcbk0egWnEtY4Wa6dPgM5P6wQQsYnIeUIQ=="
+  "resolved" "https://registry.npmjs.org/@material/tab-indicator/-/tab-indicator-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@material/animation" "^1.0.0"
+    "@material/base" "^1.0.0"
+    "@material/theme" "^1.1.0"
+    "tslib" "^1.9.3"
+
+"@material/tab@^1.0.0":
+  "integrity" "sha512-PpBehtp1eeh9wNDkYdRS3JpFa4Do9wMqK4OZo7ZSntKucjd9bx0TiA2TLj8WuFVWIWmXMcsz3DAWshyG3JAs0Q=="
+  "resolved" "https://registry.npmjs.org/@material/tab/-/tab-1.1.1.tgz"
+  "version" "1.1.1"
+  dependencies:
+    "@material/base" "^1.0.0"
+    "@material/ripple" "^1.1.0"
+    "@material/rtl" "^0.42.0"
+    "@material/tab-indicator" "^1.1.0"
+    "@material/theme" "^1.1.0"
+    "@material/typography" "^1.0.0"
+    "tslib" "^1.9.3"
+
+"@material/theme@^1.1.0":
+  "integrity" "sha512-YYUV9Rhbx4r/EMb/zoOYJUWjhXChNaLlH1rqt3vpNVyxRcxGqoVMGp5u1XALBCFiD9dACPKLIkKyRYa928nmPQ=="
+  "resolved" "https://registry.npmjs.org/@material/theme/-/theme-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@material/feature-targeting" "^0.44.1"
+
+"@material/typography@^1.0.0":
+  "integrity" "sha512-Oeqbjci1cC7jTE8/n3dwnkqKe9ZeWiaE+rgMtRYtRFw1HvAw14SpGA5EEAS/Li2Hu2KZ50FYCe3HYqShfxtChA=="
+  "resolved" "https://registry.npmjs.org/@material/typography/-/typography-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "@material/feature-targeting" "^0.44.1"
+
 "@nodelib/fs.scandir@2.1.5":
   "integrity" "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="
   "resolved" "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -10795,7 +10903,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@*", "react@^0.14.0 || ^15.0.0 || ^16.0.0", "react@^16.0.0", "react@^16.14.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.4", "react@>= 16", "react@>= 16.3.0", "react@>= 16.8.0", "react@>=15", "react@>=16.0.0", "react@>=16.6.0", "react@>=16.8", "react@17.0.2":
+"react@*", "react@^0.14.0 || ^15.0.0 || ^16.0.0", "react@^16.0.0", "react@^16.14.0", "react@^16.4.2", "react@^16.8.0 || ^17.0.0", "react@^16.8.4", "react@>= 16", "react@>= 16.3.0", "react@>= 16.8.0", "react@>=15", "react@>=16.0.0", "react@>=16.6.0", "react@>=16.8", "react@17.0.2":
   "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
   "version" "16.14.0"
@@ -12566,6 +12674,11 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
+"tslib@^1.9.3":
+  "integrity" "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
+  "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
+  "version" "1.14.1"
+
 "tslib@^2.0.1", "tslib@^2.0.3", "tslib@^2.1.0":
   "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
@@ -12859,6 +12972,11 @@
   "integrity" "sha1-ihagXURWV6Oupe7MWxKk+lN5dyw="
   "resolved" "https://registry.npmjs.org/utila/-/utila-0.4.0.tgz"
   "version" "0.4.0"
+
+"utility-types@^3.2.1":
+  "integrity" "sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg=="
+  "resolved" "https://registry.npmjs.org/utility-types/-/utility-types-3.10.0.tgz"
+  "version" "3.10.0"
 
 "utils-merge@1.0.1":
   "integrity" "sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM="
