@@ -177,7 +177,7 @@ export const ShopInfoDemo = () => {
                           {store.name}
                         </Text>
                         <Flex flexWrap="nowrap" alignItems="center" ml="16px">
-                          <IconBoxSmall>
+                          <IconBoxSmall data-tip data-for="deviceType">
                             {store.deviceType === 'android' && <IconAndroid />}
                             {store.deviceType === 'pc' && <IconDisplay />}
                           </IconBoxSmall>
@@ -189,6 +189,12 @@ export const ShopInfoDemo = () => {
                             {store.deviceType === 'android' && 'android'}
                             {store.deviceType === 'pc' && 'PC'}
                           </Text>
+                          <ReactTooltip id="deviceType" effect="solid">
+                            <span>
+                              {store.deviceType === 'android' && 'android'}
+                              {store.deviceType === 'pc' && 'PC'}
+                            </span>
+                          </ReactTooltip>
                         </Flex>
                       </Flex>
                     </Box>
