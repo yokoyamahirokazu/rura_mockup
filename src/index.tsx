@@ -1,29 +1,33 @@
+import { ChakraProvider } from '@chakra-ui/react'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import Home from 'pages/Home'
 import Service from 'pages/Service'
+import ShopInfoDemo from 'pages/ShopInfoDemo'
 import Demo from 'pages/Demo'
 import reportWebVitals from './reportWebVitals'
 import { Route, BrowserRouter, Switch } from 'react-router-dom'
-import { MuiThemeProvider } from '@material-ui/core/styles'
-import { theme } from './materialui/theme'
-
+import { theme } from './theme'
+import { Provider as ResizeObserverProvider } from '@envato/react-resize-observer-hook'
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <React.StrictMode>
-      <BrowserRouter>
-        <div>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/service" component={Service} />
-            <Route exact path="/demo" component={Demo} />
-          </Switch>
-        </div>
-      </BrowserRouter>
-    </React.StrictMode>
-  </MuiThemeProvider>,
+  <ResizeObserverProvider>
+    <ChakraProvider theme={theme}>
+      <React.StrictMode>
+        <BrowserRouter>
+          <div>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/service" component={Service} />
+              <Route exact path="/shop_info_demo" component={ShopInfoDemo} />
+              <Route exact path="/demo" component={Demo} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+      </React.StrictMode>
+    </ChakraProvider>
+  </ResizeObserverProvider>,
   document.getElementById('root'),
 )
 

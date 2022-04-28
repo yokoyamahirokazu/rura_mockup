@@ -14,7 +14,7 @@ import { ReactComponent as IconVolume } from 'assets/icon/volume_high.svg'
 import { ReactComponent as IconSizeSmall } from 'assets/icon/camera_size_small.svg'
 import { ReactComponent as IconSizeLarge } from 'assets/icon/camera_size_large.svg'
 import { useState, useRef, useEffect } from 'react'
-import React from 'react';
+import React from 'react'
 
 export const Service = () => {
   const CAMERA = [
@@ -91,11 +91,9 @@ export const Service = () => {
     else return camera.id !== 1
   })
 
-
-
-
   // 左コンポーネント幅取得
   const leftRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       const leftWidth = entries[0].contentRect.width
@@ -122,6 +120,7 @@ export const Service = () => {
   // 右コンポーネント幅取得
   const rightRef = useRef<HTMLDivElement>(null)
   const consoleLeftRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       const rightWidth = entries[0].contentRect.width
@@ -154,8 +153,6 @@ export const Service = () => {
       observer.disconnect()
     }
   }, [])
-
-
 
   return (
     <>
@@ -191,7 +188,13 @@ export const Service = () => {
               }}
             >
               {CAMERA.length === 1 && (
-                <div style={{maxWidth:'calc( (100vh - 295px) / 0.5625)',minWidth:'360px',margin:'0 a48o'}}>
+                <div
+                  style={{
+                    maxWidth: 'calc( (100vh - 295px) / 0.5625)',
+                    minWidth: '360px',
+                    margin: '0 a48o',
+                  }}
+                >
                   {CAMERA &&
                     CAMERA.map((cameraOnly) => {
                       return (
@@ -218,13 +221,13 @@ export const Service = () => {
                           justifyContent: 'center',
                           alignItems: 'flex-start',
                           width: '100%',
-                          maxWidth:'calc( (100vh - 295px) / 0.5625)',
-                          minWidth:'480px',
+                          maxWidth: 'calc( (100vh - 295px) / 0.5625)',
+                          minWidth: '480px',
                           padding: '4px',
                           boxSizing: 'border-box',
                           flexWrap: 'wrap',
                           display: 'flex',
-                          margin:'0 auto',
+                          margin: '0 auto',
                         }}
                       >
                         {CAMERA.map((camera) => {
@@ -266,7 +269,7 @@ export const Service = () => {
                                   </CameraBoxTool>
                                 </CameraBoxToolBar>
                                 <ReactTooltip id="cameraParent" effect="solid">
-                                  <span>親子表示のメインにする</span>
+                                  <span>親子表示の親にする</span>
                                 </ReactTooltip>
                                 <ReactTooltip id="cameraOnly" effect="solid">
                                   <span>このカメラ映像だけ表示</span>
@@ -281,7 +284,13 @@ export const Service = () => {
                       </div>
                     )}
                     {parent === 'block' && all === 'none' && only === 'none' && (
-                      <div style={{maxWidth:'calc( (100vh - 295px) / 0.76)',                          minWidth:'480px',margin:'0 auto'}}>
+                      <div
+                        style={{
+                          maxWidth: 'calc( (100vh - 295px) / 0.76)',
+                          minWidth: '480px',
+                          margin: '0 auto',
+                        }}
+                      >
                         {selectCmaera &&
                           selectCmaera.map((camera: any) => {
                             return (
@@ -417,7 +426,7 @@ export const Service = () => {
                                       id="cameraParent"
                                       effect="solid"
                                     >
-                                      <span>親子表示のメインにする</span>
+                                      <span>親子表示の親にする</span>
                                     </ReactTooltip>
                                     <ReactTooltip
                                       id="cameraOnly"
@@ -441,8 +450,8 @@ export const Service = () => {
                                 key={camera.id}
                                 style={{
                                   width: '100%',
-                                  maxWidth:'calc( (100vh - 295px) / 0.5625)',
-                                                            minWidth:'480px',
+                                  maxWidth: 'calc( (100vh - 295px) / 0.5625)',
+                                  minWidth: '480px',
                                   margin: '0 auto',
                                   borderRadius: '0',
                                   overflow: 'hidden',
@@ -471,7 +480,7 @@ export const Service = () => {
                                             id="cameraParent"
                                             effect="solid"
                                           >
-                                            <span>親子表示のメインにする</span>
+                                            <span>親子表示の親にする</span>
                                           </ReactTooltip>
                                         </>
                                       )}
@@ -578,12 +587,18 @@ export const Service = () => {
                   </StoreInfoBox>
                 )
               })}
-            <div style={{background:'#ddd',display:'flex',alignItems:'center',justifyContent:'center',minHeight:'200px'}}>
-              tab
+              <div
+                style={{
+                  background: '#ddd',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '200px',
+                }}
+              >
+                tab
+              </div>
             </div>
-
-            </div>
-
           </div>
           <ResizePanel
             direction="w"
