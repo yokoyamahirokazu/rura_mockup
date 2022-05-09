@@ -25,19 +25,19 @@ export const ShopInfoDemo = () => {
   const STORE = [
     {
       id: 1,
-      name: '店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名',
+      name: '店舗名店舗名店舗名店舗名店舗名店舗名店舗名店舗名',
       deviceType: 'android',
     },
   ]
 
-  const [leftWidth, setleftWidth] = useState(0)
+  const [columnLeftWidth, setColumnLeftWidth] = useState(0)
   const [shopNameWidth, setshopNameWidth] = useState(0)
-  const [shopInfoRightWidth, setshopInfoRightWidth] = useState(0)
+  const [shopRightWidth, setshopRightWidth] = useState(0)
 
   const leftRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
-      setleftWidth(entries[0].contentRect.width)
+      setColumnLeftWidth(entries[0].contentRect.width)
     })
     leftRef.current && observer.observe(leftRef.current)
     return () => {
@@ -57,55 +57,54 @@ export const ShopInfoDemo = () => {
   const shopInfoRightRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
-      setshopInfoRightWidth(entries[0].contentRect.width)
+      setshopRightWidth(entries[0].contentRect.width)
     })
     shopInfoRightRef.current && observer.observe(shopInfoRightRef.current)
     return () => {
       observer.disconnect()
     }
   }, [])
-  console.log('leftWidth:' + leftWidth)
+  console.log('ColumnLeftWidth:' + columnLeftWidth)
   console.log('shopNameWidth' + shopNameWidth)
-  console.log('shopInfoRightWidth' + shopInfoRightWidth)
+  console.log('shopRightWidth' + shopRightWidth)
 
-  const [deviceName, setdeviceName] = useControllableState({
+  const [deviceNameShow, setDeviceNameShow] = useControllableState({
     defaultValue: 'block',
   })
-  const totalWidth = leftWidth - 214
+  const residueWidth = columnLeftWidth - 212
 
-  const [shopNameMaxWidth, setshopNameMaxWidth] = useControllableState({
-    defaultValue: '340px',
+  const [shopNameMaxWidth, setShopNameMaxWidth] = useControllableState({
+    defaultValue: '360px',
   })
-  const [VolumeMaxWidth, setVolumeMaxWidth] = useControllableState({
+  const [volumeBarWidth, setVolumeBarWidth] = useControllableState({
     defaultValue: '200px',
   })
-  const [selectMaxWidth, setselectMaxWidth] = useControllableState({
-    defaultValue: '220px',
+  const [cameraSelectWidth, setCameraSelectWidth] = useControllableState({
+    defaultValue: '200px',
   })
   const [shopNameSize, setshopNameSize] = useControllableState({
-    defaultValue: '20px',
-  })
-  const [paddingLeft, setpaddingLeft] = useControllableState({
-    defaultValue: '24px',
+    defaultValue: '18px',
   })
 
-  if (leftWidth - shopNameWidth - 108 < shopInfoRightWidth + 30) {
-    setdeviceName('none')
+  if (columnLeftWidth - shopNameWidth - 140 < shopRightWidth + 16) {
+    setDeviceNameShow('none')
   } else {
-    setdeviceName('block')
+    setDeviceNameShow('block')
   }
-  if (leftWidth < 980) {
-    setshopNameMaxWidth(totalWidth * 0.43 + 'px')
-    setVolumeMaxWidth(totalWidth * 0.27 + 'px')
-    setselectMaxWidth(totalWidth * 0.3 + 'px')
-    setpaddingLeft('16px')
-    setshopNameSize('18px')
+
+  if (columnLeftWidth < 980) {
+    setShopNameMaxWidth(residueWidth * 0.44 + 'px')
+    setVolumeBarWidth(residueWidth * 0.28 + 'px')
+    setCameraSelectWidth(residueWidth * 0.28 + 'px')
   } else {
-    setshopNameMaxWidth('340px')
-    setVolumeMaxWidth('200px')
-    setselectMaxWidth('220px')
-    setshopNameSize('20px')
-    setpaddingLeft('24px')
+    setShopNameMaxWidth('360px')
+    setVolumeBarWidth('200px')
+    setCameraSelectWidth('200px')
+  }
+  if (columnLeftWidth < 640) {
+    setshopNameSize('16px')
+  } else {
+    setshopNameSize('18px')
   }
 
   return (
@@ -132,7 +131,7 @@ export const ShopInfoDemo = () => {
             style={{
               flexGrow: '2',
               width: '55%',
-              minWidth: '576px',
+              minWidth: '480px',
             }}
             ref={leftRef}
           >
@@ -163,7 +162,7 @@ export const ShopInfoDemo = () => {
                         alignItems="center"
                         justifyContent="flex-start"
                         h="60px"
-                        pl={paddingLeft}
+                        pl="16px"
                       >
                         <Text
                           fontSize={shopNameSize}
@@ -184,13 +183,16 @@ export const ShopInfoDemo = () => {
                           <Text
                             fontSize="12px"
                             m="0 0 0 3px"
-                            display={deviceName}
+                            maxW="80px"
+                            isTruncated
+                            display={deviceNameShow}
                           >
                             {store.deviceType === 'android' && 'android'}
                             {store.deviceType === 'pc' && 'PC'}
                           </Text>
                           <ReactTooltip id="deviceType" effect="solid">
                             <span>
+                              デバイスタイプ：
                               {store.deviceType === 'android' && 'android'}
                               {store.deviceType === 'pc' && 'PC'}
                             </span>
@@ -216,13 +218,18 @@ export const ShopInfoDemo = () => {
                         </ReactTooltip>
                         <Box>
                           <Flex mb="4px">
-                            <Text w="30px" fontSize="12px" mr="12px">
+                            <Text
+                              w="28px"
+                              fontSize="12px"
+                              mr="8px"
+                              letterSpacing="0"
+                            >
                               入力
                             </Text>
                             <Slider
                               aria-label="slider-ex-1"
                               defaultValue={30}
-                              w={VolumeMaxWidth}
+                              w={volumeBarWidth}
                             >
                               <SliderTrack>
                                 <SliderFilledTrack
@@ -233,13 +240,18 @@ export const ShopInfoDemo = () => {
                             </Slider>
                           </Flex>
                           <Flex>
-                            <Text w="30px" fontSize="12px" mr="12px">
+                            <Text
+                              w="28px"
+                              fontSize="12px"
+                              mr="8px"
+                              letterSpacing="0"
+                            >
                               出力
                             </Text>
                             <Slider
                               aria-label="slider-ex-1"
                               defaultValue={30}
-                              w={VolumeMaxWidth}
+                              w={volumeBarWidth}
                             >
                               <SliderTrack>
                                 <SliderFilledTrack
@@ -251,16 +263,16 @@ export const ShopInfoDemo = () => {
                           </Flex>
                         </Box>
                       </Flex>
-                      <Flex alignItems="center" ml="16px">
+                      <Flex alignItems="center" ml="24px">
                         <Box data-tip data-for="storeVolume" mr="8px">
                           <IconBox>
                             <IconVideo />
                           </IconBox>
                         </Box>
                         <ReactTooltip id="storeVolume" effect="solid">
-                          <span>店舗側音量</span>
+                          <span>カメラ切り替え</span>
                         </ReactTooltip>
-                        <Select size="sm" w={selectMaxWidth}>
+                        <Select size="sm" w={cameraSelectWidth}>
                           <option value="option1">Integrated</option>
                           <option value="option2">
                             Integrated Webcam_0c45:600000
